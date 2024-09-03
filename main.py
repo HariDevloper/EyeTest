@@ -3,15 +3,6 @@ import streamlit as st
 from PIL import Image
 from ultralytics import YOLO
 
-#Styling
-style = """
-<style>
-    #MainMenu{visibility: hidden;}
-</style>
-"""
-
-st.set_page_config(page_title='Eye disease detection')
-st.markdown(style, unsafe_allow_html=True)
 
 
 cataract_model = './Model/cataract-detection.pt'
@@ -27,56 +18,12 @@ with st.container():
 # --- MODELS SECTION ---
 with st.container():
     st.subheader("Choose a model: Cataract Detection or Other Eye Diseases")
-    selected_option = st.selectbox("Select a model", ["Cataract Detector", "Other Diseases Detector"])
+    selected_option = st.selectbox("Select a model", ["Eye Diseases Detector"])
     if selected_option == "Cataract Detector":
         model = YOLO(cataract_model)
     else:
         model = YOLO(eye_diseases_model)
 
-# --- IMAGES SECTION ---
-with st.container():
-    st.subheader("Download test images")
-    column1, column2, column3, column4, column5 = st.columns(5)
-    with column1:
-        with open("./test/test-1.jpg", "rb") as file:
-            btn = st.download_button(
-                label="Test Image 1",
-                data=file,
-                file_name="test-1.jpg",
-                mime="image/jpg"
-            )
-    with column2:
-        with open("./test/test-2.jpg", "rb") as file:
-            btn = st.download_button(
-                label="Test Image 2",
-                data=file,
-                file_name="test-2.jpg",
-                mime="image/jpg"
-            )
-    with column3:
-        with open("./test/test-3.jpg", "rb") as file:
-            btn = st.download_button(
-                label="Test Image 3",
-                data=file,
-                file_name="test-3.jpg",
-                mime="image/jpg"
-            )
-    with column4:
-        with open("./test/test-4.jpg", "rb") as file:
-            btn = st.download_button(
-                label="Test Image 4",
-                data=file,
-                file_name="test-4.jpg",
-                mime="image/jpg"
-            )
-    with column5:
-        with open("./test/test-5.jpg", "rb") as file:
-            btn = st.download_button(
-                label="Test Image 5",
-                data=file,
-                file_name="test-5.jpg",
-                mime="image/jpg"
-            )
 
 # --- PREDICTION SECTION ---
 detectedDisease = False;
@@ -141,11 +88,4 @@ with st.container():
                 st.subheader(f'Result: {count} diseases detected')
             else:
                 st.subheader(f'Result: no diseases detected')
-if detectedDisease:
-    with st.container():
-        st.write("---")
-        st.subheader(f'Suggested Actions')
 
-with st.container():
-    st.write("---")
-    st.image('./logo/iu-scse-logo.png', width=700)
